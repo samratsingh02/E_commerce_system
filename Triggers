@@ -1,0 +1,34 @@
+--!) Trigger for auto payment generate.
+DELIMITER //
+
+CREATE TRIGGER trg_after_order_insert
+AFTER INSERT ON Orders
+FOR EACH ROW
+BEGIN
+    INSERT INTO Payments (order_id, user_id, payment_method, amount, payment_status)
+    VALUES (NEW.order_id, NEW.user_id, 'credit_card', NEW.total_amount, 'pending');
+END;
+//
+
+DELIMITER ;
+
+--2)Trigger for order_item update and insert payment row.
+
+DELIMITER //
+CREATE TRIGGER trg_order_insert_payment
+AFTER INSERT ON Orders
+FOR EACH ROW
+BEGIN
+    INSERT INTO Payments (order_id, user_id, payment_method, amount, payment_status)
+    VALUES (NEW.order_id, NEW.user_id, 'credit_card', NEW.total_amount, 'pending');
+END;//
+
+CREATE TRIGGER trg_order_item_stock_update
+AFTER INSERT ON Order_Items
+FOR EACH ROW
+BEGIN
+    UPDATE Products
+    SET stock_quantity = stock_quantity - NEW.quantity
+    WHERE product_id = NEW.product_id;
+END;//
+DELIMITER ;
