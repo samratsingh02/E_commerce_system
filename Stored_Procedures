@@ -1,0 +1,18 @@
+
+DELIMITER //
+CREATE PROCEDURE GetUserOrderSummary(IN uid INT)
+BEGIN
+    SELECT o.order_id, o.status, o.total_amount, p.payment_status
+    FROM Orders o
+    LEFT JOIN Payments p ON o.order_id = p.order_id
+    WHERE o.user_id = uid;
+END;//
+
+CREATE PROCEDURE GenerateSalesReport()
+BEGIN
+    SELECT p.category, SUM(oi.quantity * oi.price) AS total_sales
+    FROM Order_Items oi
+    JOIN Products p ON oi.product_id = p.product_id
+    GROUP BY p.category;
+END;//
+DELIMITER ;
