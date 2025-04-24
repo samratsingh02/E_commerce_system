@@ -80,6 +80,12 @@ CREATE TABLE  Reports (
     FOREIGN KEY (generated_by) REFERENCES Users(user_id)
 );
 
+-- Create a view for Admin_role
+CREATE OR REPLACE VIEW AdminOrderView AS
+SELECT o.*, u.name AS customer_name, u.email
+FROM Orders o
+JOIN Users u ON o.user_id = u.user_id
+WHERE u.role = 'admin';
 
 
 
