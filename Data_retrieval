@@ -1,0 +1,45 @@
+--query 1 to find list of user by role
+SELECT 
+    user_id,
+    name,
+    email,
+    role,
+    created_at
+FROM Users
+ORDER BY role, created_at DESC;
+
+--query 2 to find admin all report summary
+
+SELECT 
+    report_id,
+    report_type,
+    generated_by,
+    created_at,
+    LEFT(content, 100) AS summary
+FROM Reports
+ORDER BY created_at DESC;
+
+--query3 to find low stock summary
+
+SELECT 
+    product_id,
+    name,
+    stock_quantity
+FROM Products
+WHERE stock_quantity < 50
+ORDER BY stock_quantity ASC;
+
+--query 4 to find all payment status method
+SELECT 
+    p.payment_id,
+    u.name AS customer,
+    p.amount,
+    p.payment_method,
+    p.payment_status,
+    p.payment_date
+FROM Payments p
+JOIN Users u ON p.user_id = u.user_id
+ORDER BY p.payment_date DESC;
+
+
+
